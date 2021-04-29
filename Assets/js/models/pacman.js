@@ -30,6 +30,7 @@ class Pacman {
 
     if (this.img.drawCount >= 10) {
       this.img.drawCount = 0
+      this.animate()
     }
 
     this.ctx.drawImage(
@@ -43,6 +44,14 @@ class Pacman {
       this.w,
       this.h
     )
+  }
+
+  animate() {
+    this.img.frameIndex++
+
+    if (this.img.frameIndex >= this.img.frames){
+      this.img.frameIndex = 0
+    }
   }
 
 }
