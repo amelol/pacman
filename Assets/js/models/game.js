@@ -4,16 +4,12 @@ class Game {
     this.intervalId = null
     
     const canvas = document.getElementById(canvasId)
-    canvas.height = 518
-    canvas.width = 520
+    canvas.height = 492
+    canvas.width = 620
     this.ctx = canvas.getContext("2d")
 
     this.background = new Background(this.ctx)
     this.pacman = new Pacman(this.ctx)
-
-    // this.obstacles = [
-    //   new Obstacle(this.ctx)
-    // ]
 
     this.drawCount = 0
 
@@ -25,11 +21,11 @@ class Game {
 
     this.intervalId = setInterval(() => {
       this.clear()
-      this.move()
-      this.draw()
-      if (this.drawCount > 200) {
+      if (this.drawCount > 30) {
         this.drawCount = 0
+        this.move()
       }
+      this.draw()
     }, 1000 / 60)
   }
 
@@ -52,6 +48,7 @@ class Game {
   }
 
   move() {
-    // this.pacman.move()
+    this.pacman.move() 
   }
+    
 }
