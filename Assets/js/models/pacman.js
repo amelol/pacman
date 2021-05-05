@@ -87,10 +87,6 @@ class Pacman {
       this.h
     )
   } 
-  
-  isFloor() {
-  return 
-  }
     
   move() {
     this.x += this.vx
@@ -103,6 +99,13 @@ class Pacman {
     if (this.img.frameIndex >= this.img.frames){
       this.img.frameIndex = 0
     }
+  }
+
+  collidesWith(element){
+    return this.x < element.x + element.w &&
+    this.x + this.w > element.x &&
+    this.y < element.y + element.h &&
+    this.y + this.h> element.y
   }
 
 }
