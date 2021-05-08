@@ -13,9 +13,15 @@ class Game {
     this.coins = []
     this.score = document.getElementById("game-score")
     this.ghosts = []
+    this.enemyIsEatable = false
+    this.energizers = []
 
     for (let i = 0; i <= 10; i++) {
       this.addCoin()
+    }
+
+    for (let i = 0; i <= 2; i++) {
+      this.addEnergizer()
     }
     
     this.drawCount = 0
@@ -39,7 +45,9 @@ class Game {
         this.drawCount = 0
         this.addGhost() 
       }
+
       this.draw()
+
       this.checkCollisions()
     }, 1000 / 60)
   }
@@ -48,17 +56,41 @@ class Game {
     const collidePacmanCoin = this.coins.find(coin => this.pacman.collidesWith(coin))
     if (collidePacmanCoin) {
       this.coins = this.coins.filter(function(coin){ 
-        return coin != collidePacmanCoin; 
-      });
+        return coin != collidePacmanCoin 
+      })
       this.addCoin()
       this.updateScore()
     }
 
     const collidePacmanGhost = this.ghosts.find(ghost => this.pacman.collidesWith(ghost))
-    if (collidePacmanGhost) {
+    if (this.enemyIsEatable = true && collidePacmanGhost) {
+      this.ghosts = this.ghosts.filter(function(ghost){ 
+      return ghost != collidePacmanGhost; 
+      })
+
+      this.addGhost() 
+      
+      for (let i = 0; i <= 5; i++) {
+      this.updateScore()
+      }
+    
+    }else if (this.enemyIsEatable = false && collidePacmanGhost){
       this.gameOver()
-      console.log("game over")
-    }    
+    }
+  
+    const collidePacmanEnergizer = this.energizers.find(energizer => this.pacman.collidesWith(energizer))
+    if (collidePacmanEnergizer) {
+      this.enemyIsEatable  = true
+      this.ghosts.forEach(ghost => ghost.isEatable = true)
+      this.energizers = this.energizers.filter(function(energizer){ 
+      return energizer != collidePacmanEnergizer; 
+      });
+        
+      setTimeout(() => {
+        this.enemyIsEatable  = false
+        this.addEnergizer()
+      }, 15000)
+    }
   }
 
   updateScore() {
@@ -75,8 +107,16 @@ class Game {
   addGhost() { 
     const ghostX = this.background.w - this.gridWidth
     const ghostY = Math.floor(Math.random() * 15) * this.gridWidth + this.gridWidth
-    const ghost = new Ghost(this.ctx, ghostX, ghostY)
+    const eatable = this.enemyIsEatable
+    const ghost = new Ghost(this.ctx, ghostX, ghostY, eatable)
     this.ghosts.push(ghost)
+  }
+
+  addEnergizer() { 
+    const energizerX = Math.floor(Math.random() * 19) * this.gridWidth + this.gridWidth
+    const energizerY = Math.floor(Math.random() * 15) * this.gridWidth + this.gridWidth
+    const energizer = new Energizer(this.ctx, energizerX, energizerY)
+    this.energizers.push(energizer)
   }
 
   onKeyEvent(event) {
@@ -93,6 +133,7 @@ class Game {
     this.pacman.draw()
     this.coins.forEach(coin => coin.draw())
     this.ghosts.forEach(ghost => ghost.draw())
+    this.energizers.forEach(energizer => energizer.draw())
   }
 
   move() {
