@@ -10,8 +10,8 @@ class Ghost {
     this.y = y
  
 
-    this.vx = 5
-    this.vy = 5
+    this.vx = 0
+    this.vy = 0
 
     this.img = new Image()
     this.img.drawCount = 0
@@ -40,11 +40,6 @@ class Ghost {
       this.h
     )
   } 
-    
-  move() {
-    this.x += this.vx
-    this.y += this.vy
-  }
 
   animate() {
     this.img.frameIndex++
@@ -53,12 +48,48 @@ class Ghost {
       this.img.frameIndex = 0
     }
   }
+    
+  move(pacman) {
 
-  collidesWith(element){
-    return this.x < element.x + element.w &&
-    this.x + this.w > element.x &&
-    this.y < element.y + element.h &&
-    this.y + this.h> element.y
+   if(this.lastMove === 'y'){
+     if (this.x < pacman.x) {
+      this.x += this.w 
+      this.lastMove = 'x'
+    }
+
+    if (this.x > pacman.x) {
+      this.x -= this.w
+      this.lastMove = 'x'
+    } 
+
+    if (this.x <= 0) {
+      this.x = 0
+      this.lastMove = 'x'
+    }
+    
+    if (this.x + this.w >= this.ctx.canvas.width){
+      this.x = this.ctx.canvas.width - this.w
+      this.lastMove = 'x'
+    } }
+    else
+    {if (this.y < pacman.y) {
+      this.y += this.h
+      this.lastMove = 'y'
+    }
+
+    if (this.y > pacman.y) {
+      this.y -= this.h
+      this.lastMove = 'y'
+    }
+
+     if(this.y <= 0){
+      this.y = 0
+      this.lastMove = 'y'
+    }
+    
+     if(this.y + this.h >= this.ctx.canvas.height){
+      this.y = this.ctx.canvas.height - this.h
+      this.lastMove = 'y'
+    }}
   }
-
 }

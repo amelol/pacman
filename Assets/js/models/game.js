@@ -97,7 +97,7 @@ class Game {
 
   move() {
     this.pacman.move() 
-    // this.ghosts.forEach(ghost => ghost.move())
+    this.ghosts.forEach(ghost => ghost.move(this.pacman))
   }
 
   gameOver() {
