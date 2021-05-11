@@ -38,7 +38,7 @@ class Game {
     
       if (this.drawCount % 25 === 0) {
         this.move()
-      }
+      } 
 
       if (this.drawCount > this.drawCountGhost) {
         this.drawCountGhost = Math.random() * 200 + 600
@@ -63,33 +63,34 @@ class Game {
     }
 
     const collidePacmanGhost = this.ghosts.find(ghost => this.pacman.collidesWith(ghost))
-    if (this.enemyIsEatable = true && collidePacmanGhost) {
+    if (collidePacmanGhost && this.enemyIsEatable) {
       this.ghosts = this.ghosts.filter(function(ghost){ 
-      return ghost != collidePacmanGhost; 
+        return ghost != collidePacmanGhost; 
       })
 
       this.addGhost() 
       
       for (let i = 0; i <= 5; i++) {
-      this.updateScore()
+        this.updateScore()
       }
     
-    }else if (this.enemyIsEatable = false && collidePacmanGhost){
+    } else if (!this.enemyIsEatable && collidePacmanGhost){
       this.gameOver()
     }
   
     const collidePacmanEnergizer = this.energizers.find(energizer => this.pacman.collidesWith(energizer))
     if (collidePacmanEnergizer) {
-      this.enemyIsEatable  = true
+      this.enemyIsEatable = true
       this.ghosts.forEach(ghost => ghost.isEatable = true)
       this.energizers = this.energizers.filter(function(energizer){ 
-      return energizer != collidePacmanEnergizer; 
+        return energizer != collidePacmanEnergizer; 
       });
         
       setTimeout(() => {
-        this.enemyIsEatable  = false
+        this.enemyIsEatable = false
+        this.ghosts.forEach(ghost => ghost.isEatable = false)
         this.addEnergizer()
-      }, 15000)
+      }, 10000)
     }
   }
 
@@ -138,15 +139,19 @@ class Game {
 
   move() {
     this.pacman.move() 
-    this.ghosts.forEach(ghost => ghost.move(this.pacman))
+    if (!this.enemyIsEatable) {
+      this.ghosts.forEach(ghost => ghost.move(this.pacman))
+    } else if (this.enemyIsEatable && this.drawCount % 75 === 0) {
+      this.ghosts.forEach(ghost => ghost.moveReverse(this.pacman))
+    }
   }
 
   gameOver() {
-    this.ctx.font = "50px Arial";
+    this.ctx.font = "50px Press Start 2P";
     this.ctx.textAlign = "center";
     this.ctx.fillStyle = "white";
     this.ctx.fillText(
-      "GAME OVER",
+      "Game over",
       this.ctx.canvas.width / 2,
       this.ctx.canvas.height / 2
     );
