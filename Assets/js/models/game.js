@@ -7,7 +7,7 @@ class Game {
     canvas.height = 492
     canvas.width = 620
     this.ctx = canvas.getContext("2d")
-    this.gridWidth = 32.5
+    this.gridWidth = 32.6
     this.background = new Background(this.ctx)
     this.pacman = new Pacman(this.ctx)
     this.coins = []
